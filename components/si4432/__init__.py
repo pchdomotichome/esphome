@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import spi, pins
+from esphome.components import spi
+from esphome import pins  # ✅ Corrección aquí
 from esphome.const import CONF_ID, CONF_CS_PIN, CONF_SPI_ID
 
 CODEOWNERS = ["@tuusuario"]
