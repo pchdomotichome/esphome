@@ -11,6 +11,7 @@ class Si4432Component : public Component, public spi::SPIDevice {
   void setup() override;
   void loop() override;
 
+ protected:
   void write_register(uint8_t reg, uint8_t value);
   uint8_t read_register(uint8_t reg);
 };
