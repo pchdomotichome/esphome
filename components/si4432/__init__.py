@@ -12,7 +12,8 @@ SI4432 = si4432_ns.class_("SI4432", cg.Component, spi.SPIDevice)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(SI4432),
-}).extend(cv.COMPONENT_SCHEMA).extend(spi.spi_device_schema(cs_pin_required=True))
+    cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
+}).extend(spi.spi_device_schema(cs_pin_required=True))  # ¡Cambio clave aquí!
 
 def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
