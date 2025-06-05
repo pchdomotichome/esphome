@@ -11,7 +11,7 @@ SI4432 = si4432_ns.class_("SI4432", cg.Component)
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(SI4432),
     cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-    cv.Required(CONF_CS_PIN): cv.pin,  # ← CORRECTO para 2025.5.x
+    cv.Required(CONF_CS_PIN): cv.templatable(cv.int_),  # ← ESTA es la forma correcta
 })
 
 
