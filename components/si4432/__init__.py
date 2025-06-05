@@ -20,6 +20,4 @@ async def to_code(config):
     cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
     var.set_cs_pin(cs)
 
-    # 👇 Esta línea es la clave: config[CONF_SPI_ID] ya es un ID válido
     await spi.register_spi_device(var, config[CONF_SPI_ID])
-
