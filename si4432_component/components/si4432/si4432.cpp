@@ -8,15 +8,13 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Setting up SI4432 component...");
+  ESP_LOGI(TAG, "Setting up Si4432 component...");
   this->spi_setup();
-  if (this->irq_pin_ != nullptr) {
-    this->irq_pin_->setup();
-  }
+  // Agregá aquí tu inicialización del SI4432
 }
 
 void Si4432Component::loop() {
-  // Aquí podrías implementar recepción o debug
+  // Acá iría la lógica de lectura de IRQ o recepción de datos
 }
 
 }  // namespace si4432
