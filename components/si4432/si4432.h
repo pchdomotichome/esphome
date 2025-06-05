@@ -1,17 +1,17 @@
 #pragma once
 
-#include "esphome/core/component.h"
 #include "esphome/components/spi/spi.h"
+#include "esphome/core/component.h"
 
 namespace esphome {
 namespace si4432 {
 
 class Si4432Component : public Component, public spi::SPIDevice {
  public:
-  void setup() override {}
-  void loop() override {}
+  void set_irq_pin(GPIOPin *pin) { irq_pin_ = pin; }
 
-  void set_irq_pin(GPIOPin *pin) { this->irq_pin_ = pin; }
+  void setup() override;
+  void loop() override;
 
  protected:
   GPIOPin *irq_pin_;
@@ -19,4 +19,3 @@ class Si4432Component : public Component, public spi::SPIDevice {
 
 }  // namespace si4432
 }  // namespace esphome
-
