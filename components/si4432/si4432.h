@@ -1,19 +1,18 @@
-
 #pragma once
-#include "esphome/components/spi/spi.h"
+
 #include "esphome/core/component.h"
-#include "esphome/core/gpio.h"
+#include "esphome/components/spi/spi.h"
 
 namespace esphome {
 namespace si4432 {
 
-class Si4432Component : public Component, public spi::SPIDevice {
+class Si4432Component : public PollingComponent, public spi::SPIDevice {
  public:
-  void set_cs_pin(GPIOPin *cs) { cs_pin_ = cs; }
-  void set_irq_pin(GPIOPin *irq) { irq_pin_ = irq; }
+  void set_cs_pin(GPIOPin *cs) { this->cs_pin_ = cs; }
+  void set_irq_pin(GPIOPin *irq) { this->irq_pin_ = irq; }
 
   void setup() override;
-  void loop() override;
+  void update() override;
 
  protected:
   GPIOPin *cs_pin_;

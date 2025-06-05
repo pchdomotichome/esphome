@@ -1,4 +1,3 @@
-
 #include "si4432.h"
 #include "esphome/core/log.h"
 
@@ -9,12 +8,12 @@ static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
   ESP_LOGI(TAG, "Setting up Si4432 component...");
-  cs_pin_->setup();  // Set as output
-  irq_pin_->setup(); // Set as input (optional: irq_pin_->pin_mode(INPUT))
+  this->cs_pin_->setup();
+  this->irq_pin_->setup();
 }
 
-void Si4432Component::loop() {
-  // Placeholder for handling IRQ or SPI transactions
+void Si4432Component::update() {
+  ESP_LOGD(TAG, "Polling Si4432...");
 }
 
 }  // namespace si4432
