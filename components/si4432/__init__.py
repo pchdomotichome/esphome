@@ -1,6 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import spi, pins
+from esphome.components import spi
+import esphome.components.gpio as gpio
 from esphome.const import CONF_ID, CONF_CS_PIN
 
 CONF_IRQ_PIN = "irq_pin"
@@ -15,8 +16,8 @@ CONFIG_SCHEMA = (
         {
             cv.GenerateID(): cv.declare_id(Si4432Component),
             cv.Required(spi.CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-            cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
-            cv.Required(CONF_IRQ_PIN): pins.gpio_input_pin_schema,
+            cv.Required(CONF_CS_PIN): gpio.output_pin_schema,
+            cv.Required(CONF_IRQ_PIN): gpio.input_pin_schema,
         }
     )
     .extend(cv.COMPONENT_SCHEMA)
@@ -31,4 +32,3 @@ async def to_code(config):
     irq = await cg.gpio_pin_expression(config[CONF_IRQ_PIN])
     cg.add(var.set_cs_pin(cs))
     cg.add(var.set_irq_pin(irq))
-
