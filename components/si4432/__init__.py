@@ -8,7 +8,7 @@ Si4432Component = si4432_ns.class_("Si4432Component", cg.Component, spi.SPIDevic
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(Si4432Component),
-    cv.Required(CONF_CS_PIN): cv.gpio_output_pin,
+    cv.Required(CONF_CS_PIN): cv.pin_schema,
 }).extend(spi.spi_device_schema())
 
 async def to_code(config):
