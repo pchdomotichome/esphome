@@ -1,3 +1,4 @@
+
 #include "si4432.h"
 #include "esphome/core/log.h"
 
@@ -7,8 +8,8 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGD(TAG, "Setting up SI4432 component...");
-  this->spi_setup();
+  ESP_LOGI(TAG, "Setting up Si4432 component...");
+  this->spi_setup();  // Inicializa el dispositivo SPI
 }
 
 void Si4432Component::loop() {
@@ -16,8 +17,9 @@ void Si4432Component::loop() {
 }
 
 void Si4432Component::read_status() {
-  uint8_t status = this->read_byte(0x02);  // Suponiendo 0x02 como un registro de estado válido
-  ESP_LOGD(TAG, "SI4432 status: 0x%02X", status);
+  // Suponiendo que 0x02 sea un registro de estado para ejemplo
+  uint8_t status = this->read_byte(0x02);
+  ESP_LOGD(TAG, "Status register: 0x%02X", status);
 }
 
 }  // namespace si4432

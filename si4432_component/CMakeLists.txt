@@ -1,1 +1,0 @@
-# CMakeLists.txt for si4432 component
