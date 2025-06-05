@@ -10,7 +10,12 @@ class Si4432Component : public Component, public spi::SPIDevice {
  public:
   void setup() override;
   void loop() override;
+  void set_cs_pin(GPIOPin *cs) { this->cs_ = cs; }
+  void set_irq_pin(GPIOPin *irq) { this->irq_ = irq; }
 
+ protected:
+  GPIOPin *cs_;
+  GPIOPin *irq_;
   void write_register(uint8_t reg, uint8_t value);
   uint8_t read_register(uint8_t reg);
 };

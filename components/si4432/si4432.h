@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "esphome/core/component.h"
@@ -10,12 +9,13 @@ namespace si4432 {
 class Si4432Component : public Component, public spi::SPIDevice {
  public:
   void setup() override;
-  void dump_config() override;
-
-  void set_irq_pin(int pin) { irq_pin_ = pin; }
+  void loop() override;
+  void set_cs_pin(GPIOPin *cs) { this->cs_ = cs; }
+  void set_irq_pin(GPIOPin *irq) { this->irq_ = irq; }
 
  protected:
-  int irq_pin_;
+  GPIOPin *cs_;
+  GPIOPin *irq_;
   void write_register(uint8_t reg, uint8_t value);
   uint8_t read_register(uint8_t reg);
 };
