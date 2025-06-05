@@ -12,7 +12,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(Si4432Component),
         cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-        cv.Optional(CONF_CS_PIN): cv.templatable(cv.pin),  # ✅ FUNCIONA EN 2025.5.2
+        cv.Optional(CONF_CS_PIN): cv.pin,  # ✅ FUNCIONA EN 2025.5.2
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
