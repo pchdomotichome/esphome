@@ -1,30 +1,24 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
+from esphome.components import spi, pins
 from esphome.const import CONF_ID, CONF_CS_PIN, CONF_SPI_ID
-from esphome.components import spi
 
+CODEOWNERS = ["@tuusuario"]
 DEPENDENCIES = ["spi"]
 
 si4432_ns = cg.esphome_ns.namespace("si4432")
-Si4432Component = si4432_ns.class_("Si4432Component", cg.Component, spi.SPIDevice)
+SI4432Component = si4432_ns.class_("SI4432Component", cg.Component, spi.SPIDevice)
 
-CONFIG_SCHEMA = cv.Schema(
-    {
-        cv.GenerateID(): cv.declare_id(Si4432Component),
-        cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-        cv.Optional(CONF_CS_PIN): cv.pin,  # ✅ FUNCIONA EN 2025.5.2
-    }
-).extend(cv.COMPONENT_SCHEMA)
+CONFIG_SCHEMA = cv.Schema({
+    cv.GenerateID(): cv.declare_id(SI4432Component),
+    cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
+    cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
+}).extend(cv.COMPONENT_SCHEMA)
 
-@cg.coroutine_with_priority(40.0)
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
-
-    spi_parent = await cg.get_variable(config[CONF_SPI_ID])
-    await spi.register_spi_device(var, spi_parent)
-
-    if CONF_CS_PIN in config:
-        cs_pin = await cg.templatable(config[CONF_CS_PIN], cg.gpio_output_pin_expression)
-        cg.add(var.set_cs_pin(cs_pin))
+    await spi.register_spi_device(var, config)
+    cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
+    cg.add(var.set_cs_pin(cs))
 
