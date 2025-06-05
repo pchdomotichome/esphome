@@ -11,9 +11,8 @@ SI4432 = si4432_ns.class_("SI4432", cg.Component)
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(SI4432),
     cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-    cv.Required(CONF_CS_PIN): cv.gpio_pin,  # ← ✔ Esto evita el error de tipo
+    cv.Required(CONF_CS_PIN): cv.All(cv.ensure_list, [cv.GPIOPin]),  # <-- compatible
 })
-
 
 async def to_code(config):
     spi_comp = await cg.get_variable(config[CONF_SPI_ID])
@@ -22,4 +21,5 @@ async def to_code(config):
     cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
     cg.add(var.set_spi(spi_comp))
     cg.add(var.set_cs_pin(cs))
+
 
