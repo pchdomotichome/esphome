@@ -13,7 +13,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(Si4432Component),
         cv.GenerateID(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-        cv.Required(CONF_CS_PIN): cv.gpio_pin,  # ← Correcto para ESPHome 2025.5.2
+        cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
     }
 )
 
@@ -24,4 +24,5 @@ async def to_code(config):
 
     cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
     var.set_cs_pin(cs)
+    await spi.register_spi_device(var, config)
 
