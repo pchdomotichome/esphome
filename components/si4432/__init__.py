@@ -13,7 +13,7 @@ Si4432Component = si4432_ns.class_("Si4432Component", cg.Component, spi.SPIDevic
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(Si4432Component),
-    cv.Required(CONF_CS_PIN): spi.validate_spi_cs_pin,
+    cv.Required(CONF_CS_PIN): cv.spi_device_cs_pin,
     cv.Required(CONF_IRQ_PIN): cv.gpio_input_pin,
 }).extend(cv.COMPONENT_SCHEMA).extend(spi.SPI_DEVICE_SCHEMA)
 
