@@ -2,6 +2,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import spi
+from esphome import pins
 from esphome.const import CONF_ID, CONF_IRQ_PIN, CONF_CS_PIN
 
 DEPENDENCIES = ["spi"]
