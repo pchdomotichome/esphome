@@ -1,0 +1,27 @@
+esphome:
+  name: si4432_sniffer
+  platform: ESP32
+  board: esp32dev
+  includes:
+    - components/si4432/si4432.h
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+  miso_pin: GPIO19
+
+logger:
+api:
+ota:
+wifi:
+  ssid: "YOUR_SSID"
+  password: "YOUR_PASSWORD"
+
+si4432:
+  cs_pin: GPIO16
+  irq_pin: GPIO17
