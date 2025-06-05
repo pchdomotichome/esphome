@@ -12,7 +12,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(Si4432Component),
         cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-        cv.Optional(CONF_CS_PIN): cv.GPIOPin,  # ✅ CORRECTO uso actualizado
+        cv.Optional(CONF_CS_PIN): gpio.output_pin_schema,  # ✅ Este es el correcto
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -25,8 +25,8 @@ async def to_code(config):
     spi_parent = await cg.get_variable(config[CONF_SPI_ID])
     await spi.register_spi_device(var, spi_parent)
 
-    # Si se define CS pin, asignarlo
+    # CS pin si está definido
     if CONF_CS_PIN in config:
-        cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
+        cs = await gpio.build_output_pin(config[CONF_CS_PIN])
         cg.add(var.set_cs_pin(cs))
 
