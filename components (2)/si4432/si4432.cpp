@@ -6,28 +6,17 @@ namespace si4432 {
 
 static const char *const TAG = "si4432";
 
-void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Setting up Si4432...");
-  this->spi_setup();
+void SI4432Component::setup() {
+  ESP_LOGCONFIG(TAG, "Setting up SI4432...");
+  // setup code here
 }
 
-void Si4432Component::loop() {
-  // Lógica de lectura si se desea
+void SI4432Component::loop() {
+  // loop code here
 }
 
-void Si4432Component::write_register(uint8_t reg, uint8_t value) {
-  this->enable();
-  this->transfer_byte(reg | 0x80);
-  this->transfer_byte(value);
-  this->disable();
-}
-
-uint8_t Si4432Component::read_register(uint8_t reg) {
-  this->enable();
-  this->transfer_byte(reg & 0x7F);
-  uint8_t value = this->transfer_byte(0);
-  this->disable();
-  return value;
+void SI4432Component::dump_config() {
+  ESP_LOGCONFIG(TAG, "SI4432 Component");
 }
 
 }  // namespace si4432

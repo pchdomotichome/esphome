@@ -6,18 +6,18 @@
 namespace esphome {
 namespace si4432 {
 
-class Si4432Component : public Component, public spi::SPIDevice {
+class SI4432Component : public Component, public spi::SPIDevice {
  public:
   void setup() override;
   void loop() override;
-  void set_cs_pin(GPIOPin *cs) { this->cs_ = cs; }
-  void set_irq_pin(GPIOPin *irq) { this->irq_ = irq; }
+  void dump_config() override;
+
+  void set_cs_pin(GPIOPin *cs) { this->cs_pin_ = cs; }
+  void set_irq_pin(GPIOPin *irq) { this->irq_pin_ = irq; }
 
  protected:
-  GPIOPin *cs_;
-  GPIOPin *irq_;
-  void write_register(uint8_t reg, uint8_t value);
-  uint8_t read_register(uint8_t reg);
+  GPIOPin *cs_pin_;
+  GPIOPin *irq_pin_;
 };
 
 }  // namespace si4432
