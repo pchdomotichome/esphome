@@ -1,8 +1,7 @@
 #pragma once
 
 #include "esphome/core/component.h"
-#include "esphome/components/spi/spi.h"          // Para SPIDevice
-#include "esphome/components/spi/spi_device.h"   // Incluye esto explícitamente
+#include "esphome/components/spi/spi.h"  // Ya incluye SPIDevice en 2025.5.2
 
 namespace esphome {
 namespace si4432 {
