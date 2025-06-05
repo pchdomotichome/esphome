@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "esphome/core/component.h"
@@ -12,11 +11,12 @@ class Si4432Component : public Component, public spi::SPIDevice {
   void setup() override;
   void loop() override;
 
-  void set_cs_pin(int pin) { cs_pin_ = pin; }
+  void set_cs_pin(GPIOPin *pin) { this->cs_pin_ = pin; }
 
  protected:
-  int cs_pin_{-1};
+  GPIOPin *cs_pin_;
 };
 
 }  // namespace si4432
 }  // namespace esphome
+
