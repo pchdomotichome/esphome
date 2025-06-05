@@ -1,0 +1,23 @@
+
+esphome:
+  name: si4432_sniffer
+  platform: ESP32
+  board: esp32dev
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/pchdomotichome/esphome
+      ref: main
+    components: [si4432]
+    refresh: 0s
+
+logger:
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+  miso_pin: GPIO19
+
+si4432:
+  cs_pin: GPIO16
+  irq_pin: GPIO17

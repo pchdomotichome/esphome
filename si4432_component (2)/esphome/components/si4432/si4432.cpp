@@ -1,7 +1,5 @@
-
 #include "si4432.h"
 #include "esphome/core/log.h"
-#include "esphome/core/helpers.h"
 
 namespace esphome {
 namespace si4432 {
@@ -9,14 +7,12 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGD(TAG, "Setting up SI4432...");
   this->spi_setup();
-  pinMode(this->irq_pin_, INPUT);
+  ESP_LOGI(TAG, "Si4432 setup complete");
 }
 
-void Si4432Component::dump_config() {
-  ESP_LOGCONFIG(TAG, "SI4432:");
-  ESP_LOGCONFIG(TAG, "  IRQ Pin: GPIO%d", this->irq_pin_);
+void Si4432Component::loop() {
+  // Opcional: lógica de recepción
 }
 
 void Si4432Component::write_register(uint8_t reg, uint8_t value) {
