@@ -1,21 +1,14 @@
-
 #pragma once
+#include "esphome.h"
 
-#include "esphome/core/component.h"
-#include "esphome/components/spi/spi_device.h"
+class SI4432 : public Component, public spi::SPIDevice {
+public:
+    void setup() override;
+    void loop() override;
+    void set_cs_pin(GPIOPin *pin);
 
-namespace esphome {
-namespace si4432 {
-
-class Si4432Component : public Component, public spi::SPIDevice {
- public:
-  void setup() override;
-  void loop() override;
-  float get_setup_priority() const override { return setup_priority::DATA; }
-
- protected:
-  void read_status();
+private:
+    GPIOPin *cs_pin_{nullptr};
+    void write_register(uint8_t reg, uint8_t value);
+    uint8_t read_register(uint8_t reg);
 };
-
-}  // namespace si4432
-}  // namespace esphome

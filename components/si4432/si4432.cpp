@@ -1,26 +1,34 @@
-
 #include "si4432.h"
-#include "esphome/core/log.h"
 
-namespace esphome {
-namespace si4432 {
-
-static const char *const TAG = "si4432";
-
-void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Setting up Si4432 component...");
-  this->spi_setup();  // Inicializa el dispositivo SPI
+void SI4432::set_cs_pin(GPIOPin *pin) {
+    this->cs_pin_ = pin;
 }
 
-void Si4432Component::loop() {
-  this->read_status();
+void SI4432::write_register(uint8_t reg, uint8_t value) {
+    this->enable();
+    this->write_byte(reg | 0x80); // Bit 7 alto para escritura
+    this->write_byte(value);
+    this->disable();
 }
 
-void Si4432Component::read_status() {
-  // Suponiendo que 0x02 sea un registro de estado para ejemplo
-  uint8_t status = this->read_byte(0x02);
-  ESP_LOGD(TAG, "Status register: 0x%02X", status);
+uint8_t SI4432::read_register(uint8_t reg) {
+    this->enable();
+    this->write_byte(reg & 0x7F); // Bit 7 bajo para lectura
+    uint8_t value = this->read_byte();
+    this->disable();
+    return value;
 }
 
-}  // namespace si4432
-}  // namespace esphome
+void SI4432::setup() {
+    if (this->cs_pin_ != nullptr) {
+        this->cs_pin_->digital_write(true);
+    }
+    // Configuración inicial del SI4432 (ejemplo: 433MHz)
+    write_register(0x75, 0x53); // Frecuencia base
+    write_register(0x76, 0x64); // Paso de frecuencia
+    ESP_LOGI("SI4432", "Inicializado a 433MHz");
+}
+
+void SI4432::loop() {
+    // Lógica de recepción/transmisión (opcional)
+}
