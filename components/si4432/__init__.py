@@ -1,3 +1,4 @@
+
 import esphome.config_validation as cv
 import esphome.codegen as cg
 from esphome.components import spi
@@ -27,7 +28,12 @@ CONFIG_SCHEMA = (
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
-    await spi.register_spi_device(var, config[CONF_SPI_ID], config[CONF_CS_PIN])
-    irq_pin = await cg.gpio_pin_expression(config[CONF_IRQ_PIN])
-    cg.add(var.set_irq_pin(irq_pin))
 
+    spi_dev = await cg.get_variable(config[CONF_SPI_ID])
+    await spi.register_spi_device(var, spi_dev)
+
+    cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
+    cg.add(var.set_cs_pin(cs))
+
+    irq = await cg.gpio_pin_expression(config[CONF_IRQ_PIN])
+    cg.add(var.set_irq_pin(irq))
