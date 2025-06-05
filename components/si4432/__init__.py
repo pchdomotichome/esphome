@@ -9,9 +9,9 @@ DEPENDENCIES = ["spi"]
 si4432_ns = cg.esphome_ns.namespace("si4432")
 Si4432Component = si4432_ns.class_("Si4432Component", cg.PollingComponent, spi.SPIDevice)
 
+CONF_SPI_ID = "spi_id"
 CONF_CS_PIN = "cs_pin"
 CONF_IRQ_PIN = "irq_pin"
-
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(Si4432Component),
