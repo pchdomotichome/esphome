@@ -13,7 +13,7 @@ class Si4432Component : public esphome::Component, public esphome::spi::SPIDevic
 
  protected:
   void read_status();
- // uint8_t read_byte(uint8_t reg);
+  uint8_t read_byte(uint8_t reg);
 };
 
 }  // namespace si4432
