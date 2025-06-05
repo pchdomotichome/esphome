@@ -1,7 +1,7 @@
-
 import esphome.config_validation as cv
 import esphome.codegen as cg
-from esphome.components import spi, gpio
+from esphome.components import spi
+from esphome import pins
 from esphome.const import CONF_ID
 
 DEPENDENCIES = ["spi"]
@@ -17,12 +17,11 @@ CONFIG_SCHEMA = (
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(SI4432Component),
-            cv.Required(CONF_CS_PIN): gpio.output_pin_schema,
-            cv.Required(CONF_IRQ_PIN): gpio.input_pin_schema,
+            cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
+            cv.Required(CONF_IRQ_PIN): pins.gpio_input_pin_schema,
             cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
         }
-    )
-    .extend(cv.COMPONENT_SCHEMA)
+    ).extend(cv.COMPONENT_SCHEMA)
 )
 
 async def to_code(config):
