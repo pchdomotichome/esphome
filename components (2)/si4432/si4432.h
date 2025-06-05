@@ -1,6 +1,4 @@
-
 #pragma once
-
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi_device.h"
 
@@ -11,7 +9,6 @@ class Si4432Component : public Component, public spi::SPIDevice {
  public:
   void setup() override;
   void loop() override;
-  float get_setup_priority() const override { return setup_priority::DATA; }
 
  protected:
   void read_status();
