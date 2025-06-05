@@ -1,4 +1,5 @@
 #pragma once
+
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi_device.h"
 
@@ -12,6 +13,7 @@ class Si4432Component : public Component, public spi::SPIDevice {
 
  protected:
   void read_status();
+  uint8_t read_byte(uint8_t reg);
 };
 
 }  // namespace si4432
