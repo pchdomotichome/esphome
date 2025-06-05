@@ -7,12 +7,12 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Setting up Si4432...");
-  // TODO: Initialize the SI4432 device via SPI
+  ESP_LOGI(TAG, "Setting up Si4432Component...");
+  // Inicialización del hardware aquí
 }
 
 void Si4432Component::loop() {
-  // TODO: Read data or handle interrupts
+  // Lógica principal del componente
 }
 
 void Si4432Component::set_cs_pin(GPIOPin *pin) {

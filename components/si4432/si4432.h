@@ -10,7 +10,6 @@ class Si4432Component : public Component, public spi::SPIDevice {
  public:
   void setup() override;
   void loop() override;
-
   void set_cs_pin(GPIOPin *pin);
   void set_irq_pin(GPIOPin *pin);
 
