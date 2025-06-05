@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "esphome/core/component.h"
@@ -7,22 +6,17 @@
 namespace esphome {
 namespace si4432 {
 
-class SI4432Component : public Component, public spi::SPIDevice {
+class Si4432Component : public Component {
  public:
-  void set_cs_pin(GPIOPin *pin) { cs_pin_ = pin; }
-  void set_irq_pin(GPIOPin *pin) { irq_pin_ = pin; }
+  void setup() override;
+  void loop() override;
 
-  void setup() override {
-    // Inicialización del transceptor aquí si se desea
-  }
-
-  void loop() override {
-    // Bucle principal
-  }
+  void set_spi_device(spi::SPIDevice *device) { this->spi_dev_ = device; }
 
  protected:
-  GPIOPin *cs_pin_;
-  GPIOPin *irq_pin_;
+  spi::SPIDevice *spi_dev_{nullptr};
+
+  void read_status();
 };
 
 }  // namespace si4432
