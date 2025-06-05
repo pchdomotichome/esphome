@@ -1,13 +1,7 @@
-from esphome.components.spi import SPIComponent
-from esphome.components.spi import spi_device_schema
-from esphome.const import CONF_ID
-from esphome.components import spi
-import esphome.config_validation as cv
 import esphome.codegen as cg
-from esphome.components.spi import SpiDevice
-from esphome.const import CONF_CS_PIN
-
-from esphome.components.output import gpio
+import esphome.config_validation as cv
+from esphome import pins
+from esphome.const import CONF_ID, CONF_CS_PIN
 
 DEPENDENCIES = ["spi"]
 AUTO_LOAD = ["spi"]
@@ -17,9 +11,7 @@ Si4432Component = si4432_ns.class_("Si4432Component", cg.Component)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(Si4432Component),
-#    cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
-    cv.Required(CONF_CS_PIN): gpio.gpio_output_pin_schema,
-
+    cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
 }).extend(cv.COMPONENT_SCHEMA)
 
 async def to_code(config):
