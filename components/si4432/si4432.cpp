@@ -1,5 +1,6 @@
-#include "esphome/core/log.h"
+
 #include "si4432.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace si4432 {
@@ -7,12 +8,12 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Setting up Si4432 receiver...");
-  // Aquí irá la inicialización real del chip Si4432
+  ESP_LOGI(TAG, "Setting up SI4432 component (receive-only)...");
+  // Aquí va la lógica de inicialización del receptor
 }
 
 void Si4432Component::loop() {
-  // Aquí iría la lógica para recibir datos
+  // Aquí puede ir el procesamiento de datos del receptor
 }
 
 }  // namespace si4432
