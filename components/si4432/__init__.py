@@ -2,6 +2,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import spi, sensor
 from esphome.const import CONF_ID, CONF_CS_PIN
+from esphome import pins
 
 DEPENDENCIES = ['spi']
 
@@ -10,14 +11,13 @@ Si4432Component = si4432_ns.class_('Si4432Component', cg.Component, spi.SPIDevic
 
 CONF_STATUS_SENSOR = "status_sensor"
 
-CONFIG_SCHEMA = (
-    cv.Schema({
+CONFIG_SCHEMA = cv.Schema(
+    {
         cv.GenerateID(): cv.declare_id(Si4432Component),
-        cv.Required(CONF_CS_PIN): cv.gpio_pin,
-        cv.Optional(CONF_STATUS_SENSOR): cv.use_id(sensor.Sensor),
-    })
-    .extend(cv.COMPONENT_SCHEMA)
-    .extend(spi.spi_device_schema())
+        cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
+        cv.Optional("status_sensor"): cv.declare_id(sensor.Sensor),
+    }
+).extend(spi.spi_device_schema())
 )
 
 async def to_code(config):
