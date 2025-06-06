@@ -1,5 +1,7 @@
 #include "si4432.h"
 #include "esphome/core/log.h"
+#include "si4432.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace si4432 {
@@ -7,30 +9,32 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
+  ESP_LOGI(TAG, "Si4432 setup starting");
+
+  // Inicializa el SPI
   this->spi_setup();
-  ESP_LOGI(TAG, "Si4432 setup completed. CS pin: GPIO%d", cs_pin_);
+
+  ESP_LOGI(TAG, "Si4432 setup: CS pin is GPIO%d", this->cs_pin_);
 }
 
 void Si4432Component::loop() {
-  const uint32_t now = millis();
-  if (now - last_read_time_ < 5000)
-    return;
+  static uint32_t last_read = 0;
+  if (millis() - last_read > 5000) {
+    last_read = millis();
 
-  last_read_time_ = now;
+    // Leer algunos registros clave del chip Si4432
+    uint8_t reg07 = this->read_register(0x07);  // Operating mode and function control 1
+    uint8_t reg08 = this->read_register(0x08);  // Operating mode and function control 2
+    uint8_t reg0C = this->read_register(0x0C);  // Device status
 
-  // Leer registros clave
-  uint8_t status = read_register(0x07);
-  uint8_t device_type = read_register(0x00);
-  uint8_t version = read_register(0x01);
-
-  ESP_LOGI(TAG, "Reg 0x07: 0x%02X | Device Type: 0x%02X | Version: 0x%02X",
-           status, device_type, version);
+    ESP_LOGI(TAG, "Reg 0x07 = 0x%02X | Reg 0x08 = 0x%02X | Reg 0x0C = 0x%02X", reg07, reg08, reg0C);
+  }
 }
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
   this->enable();  // CS LOW
-  this->transfer(reg & 0x7F);  // MSB=0 for read
-  uint8_t value = this->transfer(0x00);  // Dummy write to read
+  this->transfer(reg & 0x7F);  // Clear MSB to indicate read
+  uint8_t value = this->transfer(0x00);  // Dummy byte to read response
   this->disable();  // CS HIGH
   return value;
 }
