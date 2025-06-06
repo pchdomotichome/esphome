@@ -22,7 +22,7 @@ void Si4432Component::setup() {
 
 void Si4432Component::loop() {
   uint8_t reg_val = this->read_register(0x07);
-  ESP_LOGI("si4432", "Reg 0x07 = 0x%02X", reg_val);
+//  ESP_LOGI("si4432", "Reg 0x07 = 0x%02X", reg_val);
 }
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
