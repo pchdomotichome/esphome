@@ -17,7 +17,7 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Required(CONF_CS_PIN): pins.gpio_output_pin_schema,
         cv.Optional("status_sensor"): cv.declare_id(sensor.Sensor),
     }
-).extend(spi.spi_device_schema())
+).extend(spi.spi_device_schema()
 )
 
 async def to_code(config):
