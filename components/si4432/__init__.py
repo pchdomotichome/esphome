@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import spi
+from esphome.components import spi, gpio  # ✅ usamos gpio para validar el pin
 from esphome.const import CONF_ID, CONF_CS_PIN, CONF_SPI_ID
 
 CODEOWNERS = ["@tucmundo"]
@@ -13,7 +13,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(Si4432Component),
         cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-        cv.Required(CONF_CS_PIN): cv.gpio_pin_schema,  # ✅ ← Este schema acepta pines tipo GPIO16
+        cv.Required(CONF_CS_PIN): gpio.gpio_output_pin_schema,  # ✅ ESTE FUNCIONA en 2025.5.2
     }
 )
 
@@ -21,7 +21,7 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
-    cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])      # ✅ procesamos CS pin
-    parent = await cg.get_variable(config[CONF_SPI_ID])         # ✅ obtenemos SPI parent
-    await spi.register_spi_device(var, parent, cs)              # ✅ registramos dispositivo SPI
+    cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])       # ✅ correcto para GPIO output pin
+    parent = await cg.get_variable(config[CONF_SPI_ID])          # ✅ SPI parent
+    await spi.register_spi_device(var, parent, cs)               # ✅ registro válido
 
