@@ -1,12 +1,17 @@
 #pragma once
 
 #include "esphome/core/component.h"
-#include "esphome/components/spi/spi.h"  // ✅ este es el include correcto en 2025.5.2
+#include "esphome/components/spi/spi.h"
 
 namespace esphome {
 namespace si4432 {
 
-class Si4432Component : public Component, public spi::SPIDevice<Si4432Component> {
+class Si4432Component : public Component,
+                        public spi::SPIDevice<
+                            spi::BIT_ORDER_MSB_FIRST,
+                            spi::CLOCK_POLARITY_LOW,
+                            spi::CLOCK_PHASE_LEADING,
+                            spi::DATA_RATE_1MHZ> {
  public:
   void setup() override;
   void loop() override;
