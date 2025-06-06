@@ -11,12 +11,10 @@ class Si4432Component : public Component, public spi::SPIDevice {
   void setup() override;
   void loop() override;
 
-  void set_cs_pin(uint8_t cs) { this->cs_pin_ = cs; }
-
  protected:
-  uint8_t cs_pin_{0};
-
   uint8_t read_register(uint8_t reg);
+
+  uint32_t last_read_time_{0};
 };
 
 }  // namespace si4432
