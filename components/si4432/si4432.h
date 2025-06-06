@@ -6,19 +6,13 @@
 namespace esphome {
 namespace si4432 {
 
-class Si4432Component : public Component {
+class Si4432Component : public Component, public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST, spi::CLOCK_POLARITY_LOW, spi::CLOCK_PHASE_LEADING, spi::DATA_RATE_1MHZ> {
  public:
   void setup() override;
   void loop() override;
 
-  void set_spi(esphome::spi::SPIComponent *spi) { this->spi_ = spi; }
-  void set_cs_pin(int cs_pin) { this->cs_pin_ = cs_pin; }
-
  protected:
   uint8_t read_register(uint8_t reg);
-
-  esphome::spi::SPIComponent *spi_{nullptr};
-  int cs_pin_{-1};
 };
 
 }  // namespace si4432
