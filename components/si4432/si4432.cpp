@@ -7,42 +7,43 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Si4432 setup starting");
-  this->spi_setup();
+  ESP_LOGI(TAG, "Si4432 setup: CS pin configured");
+  this->cs_pin_->setup();  // Configurar CS como salida
+  this->cs_pin_->digital_write(true);  // CS HIGH
 }
 
 void Si4432Component::loop() {
-  const unsigned long now = millis();
-  if (now - this->last_read_time_ >= 5000) {
-    this->last_read_time_ = now;
-    this->read_diagnostics();
+  uint32_t now = millis();
+  if (now - this->last_read_time_ < 5000) {
+    return;
   }
+  this->last_read_time_ = now;
+
+  uint8_t status = this->read_register(0x07);  // Operating Mode & Function Control 1
+  uint8_t device_type = this->read_register(0x00);  // Device Type
+  uint8_t version = this->read_register(0x01);      // Version
+  uint8_t status2 = this->read_register(0x02);      // Device Status
+
+  ESP_LOGI(TAG, "SI4432 Registers:");
+  ESP_LOGI(TAG, "  Reg 0x00 (Device Type)   = 0x%02X", device_type);
+  ESP_LOGI(TAG, "  Reg 0x01 (Version)       = 0x%02X", version);
+  ESP_LOGI(TAG, "  Reg 0x02 (Status)        = 0x%02X", status2);
+  ESP_LOGI(TAG, "  Reg 0x07 (Operating Mode)= 0x%02X", status);
 }
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
-  this->enable();  // CS LOW
-  this->transfer(reg & 0x7F);  // Clear MSB for read
-  uint8_t val = this->transfer(0x00);  // Dummy write to read
-  this->disable();  // CS HIGH
-  return val;
-}
+  this->cs_pin_->digital_write(false);  // CS LOW
+  delayMicroseconds(1);
 
-void Si4432Component::read_diagnostics() {
-  ESP_LOGD(TAG, "Reading Si4432 diagnostics...");
+  this->spi_->transfer_byte(reg & 0x7F);  // Clear MSB for read
+  uint8_t value = this->spi_->transfer_byte(0x00);  // Dummy byte to receive data
 
-  uint8_t dev_type = this->read_register(0x00);
-  uint8_t version  = this->read_register(0x01);
-  uint8_t status   = this->read_register(0x02);
-  uint8_t op_mode  = this->read_register(0x07);
-  uint8_t rssi     = this->read_register(0x26);
-
-  ESP_LOGI(TAG, "Device Type: 0x%02X", dev_type);
-  ESP_LOGI(TAG, "Version    : 0x%02X", version);
-  ESP_LOGI(TAG, "Status     : 0x%02X", status);
-  ESP_LOGI(TAG, "Op Mode    : 0x%02X", op_mode);
-  ESP_LOGI(TAG, "RSSI       : 0x%02X", rssi);
+  this->cs_pin_->digital_write(true);  // CS HIGH
+  delayMicroseconds(1);
+  return value;
 }
 
 }  // namespace si4432
 }  // namespace esphome
+
 
