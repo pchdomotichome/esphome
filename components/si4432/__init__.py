@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import spi
+from esphome.components import spi, gpio  # <--- Importar gpio aquí
 from esphome.const import CONF_ID, CONF_CS_PIN, CONF_SPI_ID
 
 CODEOWNERS = ["@tuusuario"]
@@ -14,7 +14,7 @@ CONFIG_SCHEMA = (
         {
             cv.Required(CONF_ID): cv.declare_id(Si4432Component),
             cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-            cv.Required(CONF_CS_PIN): cv.gpio_output_pin_schema,
+            cv.Required(CONF_CS_PIN): gpio.gpio_output_pin_schema,  # <--- Aquí está el cambio correcto
         }
     )
 )
@@ -25,5 +25,7 @@ async def to_code(config):
 
     spi_dev = await spi.register_spi_device(var, config)
     cg.add(var.set_spi(spi_dev))
+
     cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
     cg.add(var.set_cs_pin(cs))
+
