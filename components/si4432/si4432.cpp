@@ -19,20 +19,22 @@ void Si4432Component::loop() {
   if (now - last_read >= interval_ms) {
     last_read = now;
 
-    // 1. Intentar poner el chip en modo standby (bit 0 en 1)
-    write_register(0x07, 0b00000001);
+    // 1. Resetear chip y sacarlo de shutdown (modo standby)
+    write_register(0x07, 0x01);  // 0x07 = Operating Mode and Function Control 1
     delay(1);
 
-    // 2. Escribir configuración en registro 0x09 (Data Access Control)
+    // 2. Configurar Data Access Control
     write_register(0x09, 0x62);
     delay(1);
 
-    // 3. Leer registros clave
+    // 3. Leer registros importantes
+    ESP_LOGI(TAG, "[Loop] Reg 0x00 (Device Type) = 0x%02X", read_register(0x00));
+    ESP_LOGI(TAG, "[Loop] Reg 0x06 (Interrupt Enable 2) = 0x%02X", read_register(0x06));
     ESP_LOGI(TAG, "[Loop] Reg 0x07 = 0x%02X", read_register(0x07));
+    ESP_LOGI(TAG, "[Loop] Reg 0x09 (Data Access Control) = 0x%02X", read_register(0x09));
     ESP_LOGI(TAG, "[Loop] Reg 0x0C = 0x%02X", read_register(0x0C));
     ESP_LOGI(TAG, "[Loop] Reg 0x0D = 0x%02X", read_register(0x0D));
     ESP_LOGI(TAG, "[Loop] Reg 0x0E = 0x%02X", read_register(0x0E));
-    ESP_LOGI(TAG, "[Loop] Reg 0x09 (Data Access Control) = 0x%02X", read_register(0x09));
     
     
   }
