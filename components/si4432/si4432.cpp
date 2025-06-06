@@ -30,8 +30,8 @@ void Si4432Component::loop() {
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
   this->cs_->digital_write(false);  // CS LOW
-  spi::transfer_byte(this->spi_, reg & 0x7F);  // MSB=0 → read
-  uint8_t value = spi::transfer_byte(this->spi_, 0x00);  // Dummy byte
+  this->spi_->transfer(reg & 0x7F);  // MSB=0 → read
+  uint8_t value = this->spi_->transfer(0x00);  // Dummy write to read
   this->cs_->digital_write(true);   // CS HIGH
   return value;
 }
