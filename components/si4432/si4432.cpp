@@ -19,15 +19,20 @@ void Si4432Component::loop() {
   if (now - last_read >= interval_ms) {
     last_read = now;
 
-    uint8_t reg_07 = read_register(0x07);  // Operating Mode & Function Control 1
-    uint8_t reg_0C = read_register(0x0C);  // Device Status
-    uint8_t reg_0D = read_register(0x0D);  // Interrupt Status 1
-    uint8_t reg_0E = read_register(0x0E);  // Interrupt Status 2
-
+    // Leer registros clave de estado
+    uint8_t reg_07 = read_register(0x07);
+    uint8_t reg_0C = read_register(0x0C);
+    uint8_t reg_0D = read_register(0x0D);
+    uint8_t reg_0E = read_register(0x0E);
     ESP_LOGI(TAG, "[Loop] Reg 0x07 = 0x%02X", reg_07);
     ESP_LOGI(TAG, "[Loop] Reg 0x0C = 0x%02X", reg_0C);
     ESP_LOGI(TAG, "[Loop] Reg 0x0D = 0x%02X", reg_0D);
     ESP_LOGI(TAG, "[Loop] Reg 0x0E = 0x%02X", reg_0E);
+
+    // 🔧 Escribir un valor a un registro RW y leerlo de vuelta
+    write_register(0x09, 0x62);  // Set Data Access Control (por ejemplo)
+    uint8_t reg_09 = read_register(0x09);
+    ESP_LOGI(TAG, "[Loop] Reg 0x09 (Data Access Control) = 0x%02X", reg_09);
   }
 }
 
