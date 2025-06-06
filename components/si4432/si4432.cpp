@@ -1,5 +1,5 @@
 #include "si4432.h"
-
+static const char *const TAG = "si4432";
 namespace esphome {
 namespace si4432 {
 
