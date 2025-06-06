@@ -27,3 +27,4 @@ async def to_code(config):
 
     await spi.register_spi_device(var, spi_conf)
 
+
