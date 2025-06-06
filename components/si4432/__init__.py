@@ -20,6 +20,5 @@ async def to_code(config):
     await cg.register_component(var, config)
 
     var.set_cs_pin(config[CONF_CS_PIN])  # ✅ usamos int directamente
-    parent = await cg.get_variable(config[CONF_SPI_ID])  # ✅ extraer correctamente el SPIComponent
-    await spi.register_spi_device(var, parent)  # ✅ pasar SPIComponent
+    await spi.register_spi_device(var, config[CONF_SPI_ID])
 
