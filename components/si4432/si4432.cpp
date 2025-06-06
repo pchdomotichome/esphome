@@ -1,5 +1,6 @@
 #include "si4432.h"
 #include "esphome/core/log.h"
+#include "esphome/components/spi/spi.h"
 
 namespace esphome {
 namespace si4432 {
@@ -7,43 +8,37 @@ namespace si4432 {
 static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
-  ESP_LOGI(TAG, "Si4432 setup starting");
-  this->spi_setup();  // Inicializa el dispositivo SPI
-
-  // Leer algunos registros clave para verificar comunicación
-  uint8_t reg_07 = this->read_register(0x07);
-  ESP_LOGI(TAG, "Reg 0x07 (Device Status) = 0x%02X", reg_07);
-
-  uint8_t reg_02 = this->read_register(0x02);
-  ESP_LOGI(TAG, "Reg 0x02 (Interrupt Enable 1) = 0x%02X", reg_02);
-
-  uint8_t reg_03 = this->read_register(0x03);
-  ESP_LOGI(TAG, "Reg 0x03 (Interrupt Enable 2) = 0x%02X", reg_03);
+  ESP_LOGI(TAG, "Si4432 setup complete");
 }
 
 void Si4432Component::loop() {
-  static uint32_t last_read = 0;
-  const uint32_t interval_ms = 5000;
-  uint32_t now = millis();
+  const uint32_t now = millis();
+  if (now - this->last_log_time_ >= 5000) {
+    this->last_log_time_ = now;
 
-  if (now - last_read >= interval_ms) {
-    last_read = now;
+    uint8_t reg_type = this->read_register(0x00);   // Device Type
+    uint8_t reg_ver  = this->read_register(0x01);   // Version
+    uint8_t reg_stat = this->read_register(0x02);   // Status
+    uint8_t reg_int1 = this->read_register(0x03);   // Interrupt Status 1
+    uint8_t reg_int2 = this->read_register(0x04);   // Interrupt Status 2
+    uint8_t reg_mode = this->read_register(0x07);   // Operating Mode
 
-    uint8_t device_status = this->read_register(0x07);
-    ESP_LOGI(TAG, "[Loop] Reg 0x07 = 0x%02X", device_status);
+    ESP_LOGI(TAG, "[Loop] Type=0x%02X Ver=0x%02X Stat=0x%02X INT1=0x%02X INT2=0x%02X MODE=0x%02X",
+             reg_type, reg_ver, reg_stat, reg_int1, reg_int2, reg_mode);
   }
 }
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
-  this->enable();                              // CS LOW
-  this->write_byte(reg & 0x7F);                // Dirección de lectura (MSB=0)
-  uint8_t value = this->read_byte();           // Dummy → leer valor
-  this->disable();                             // CS HIGH
+  this->enable();  // CS LOW
+  spi::spi_transfer_byte(this, reg & 0x7F);  // Clear MSB for read
+  uint8_t value = spi::spi_transfer_byte(this, 0x00);  // Dummy write to receive
+  this->disable();  // CS HIGH
   return value;
 }
 
 }  // namespace si4432
 }  // namespace esphome
+
 
 
 
