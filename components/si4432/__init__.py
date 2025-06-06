@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import spi
-from esphome.const import CONF_ID, CONF_SPI_ID, CONF_CS_PIN
+from esphome.const import CONF_ID, CONF_CS_PIN, CONF_SPI_ID
 
 CODEOWNERS = ["@pch"]
 DEPENDENCIES = ["spi"]
@@ -19,6 +19,7 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
-    var.set_cs_pin(config[CONF_CS_PIN])  # ✅ directo como int
-    await spi.register_spi_device(var, config[CONF_SPI_ID])  # ✅ no pasar config completo
+    var.set_cs_pin(config[CONF_CS_PIN])  # ✅ usamos int directamente
+    parent = await cg.get_variable(config[CONF_SPI_ID])  # ✅ extraer correctamente el SPIComponent
+    await spi.register_spi_device(var, parent)  # ✅ pasar SPIComponent
 
