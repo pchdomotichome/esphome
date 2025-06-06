@@ -19,6 +19,5 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
-    parent = await cg.get_variable(config[CONF_SPI_ID])
-    await spi.register_spi_device(var, parent, config[CONF_CS_PIN])  # ✅ ← no usar gpio_pin_expression
+    await spi.register_spi_device(var, config)
 
