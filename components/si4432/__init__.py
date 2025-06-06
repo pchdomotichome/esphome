@@ -12,7 +12,7 @@ Si4432Component = si4432_ns.class_("Si4432Component", cg.Component, spi.SPIDevic
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(Si4432Component),
     cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-    cv.Required(CONF_CS_PIN): cv.int_,  # ← CS pin como entero simple
+    cv.Required(CONF_CS_PIN): cv.int_,
 })
 
 async def to_code(config):
@@ -21,6 +21,6 @@ async def to_code(config):
 
     var.set_cs_pin(config[CONF_CS_PIN])
 
-    spi_parent = await cg.get_variable(config[CONF_SPI_ID])
-    await spi.register_spi_device(var, spi_parent)
+    # ✅ PASA config directo, no extraigas el ID ni uses get_variable
+    await spi.register_spi_device(var, config)
 
