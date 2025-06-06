@@ -36,11 +36,18 @@ void Si4432Component::loop() {
   }
 }
 
+void Si4432Component::write_register(uint8_t reg, uint8_t value) {
+  this->enable();                            // CS LOW
+  this->write_byte(reg | 0x80);              // MSB=1 para escritura
+  this->write_byte(value);
+  this->disable();                           // CS HIGH
+}
+
 uint8_t Si4432Component::read_register(uint8_t reg) {
-  this->enable();                              // CS LOW
-  this->write_byte(reg & 0x7F);                // Dirección de lectura (MSB=0)
-  uint8_t value = this->read_byte();           // Dummy → leer valor
-  this->disable();                             // CS HIGH
+  this->enable();                            // CS LOW
+  this->write_byte(reg & 0x7F);              // MSB=0 para lectura
+  uint8_t value = this->read_byte();         // Dummy para recibir
+  this->disable();                           // CS HIGH
   return value;
 }
 
