@@ -1,7 +1,5 @@
 #include "si4432.h"
 #include "esphome/core/log.h"
-#include "si4432.h"
-#include "esphome/core/log.h"
 
 namespace esphome {
 namespace si4432 {
