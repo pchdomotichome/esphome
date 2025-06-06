@@ -8,7 +8,6 @@ static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
   ESP_LOGI(TAG, "Si4432 setup starting");
-  this->spi_setup();  // Inicializa SPI desde SPIDevice
 }
 
 void Si4432Component::loop() {
@@ -18,27 +17,28 @@ void Si4432Component::loop() {
 
   last_read_time_ = now;
 
-  uint8_t status = read_register(0x07);  // Operating Mode & Function Control 1
-  uint8_t interrupt_status1 = read_register(0x03);
-  uint8_t interrupt_status2 = read_register(0x04);
-  uint8_t device_status = read_register(0x02);
+  uint8_t reg_07 = read_register(0x07);  // Operating Mode
+  uint8_t reg_02 = read_register(0x02);  // Device Status
+  uint8_t reg_03 = read_register(0x03);  // Interrupt Status 1
+  uint8_t reg_04 = read_register(0x04);  // Interrupt Status 2
 
-  ESP_LOGI(TAG, "Reg 0x07 (OpMode1):  0x%02X", status);
-  ESP_LOGI(TAG, "Reg 0x03 (IntStat1): 0x%02X", interrupt_status1);
-  ESP_LOGI(TAG, "Reg 0x04 (IntStat2): 0x%02X", interrupt_status2);
-  ESP_LOGI(TAG, "Reg 0x02 (DevStat):  0x%02X", device_status);
+  ESP_LOGI(TAG, "Reg 0x07 (OpMode1):  0x%02X", reg_07);
+  ESP_LOGI(TAG, "Reg 0x02 (DevStat):  0x%02X", reg_02);
+  ESP_LOGI(TAG, "Reg 0x03 (IntStat1): 0x%02X", reg_03);
+  ESP_LOGI(TAG, "Reg 0x04 (IntStat2): 0x%02X", reg_04);
 }
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
-  this->enable();  // CS LOW
-  this->transfer_byte(reg & 0x7F);  // MSB=0 for read
-  uint8_t value = this->transfer_byte(0x00);  // Dummy write
-  this->disable();  // CS HIGH
+  this->cs_->digital_write(false);  // CS LOW
+  spi::transfer_byte(this->spi_, reg & 0x7F);  // MSB=0 → read
+  uint8_t value = spi::transfer_byte(this->spi_, 0x00);  // Dummy byte
+  this->cs_->digital_write(true);   // CS HIGH
   return value;
 }
 
 }  // namespace si4432
 }  // namespace esphome
+
 
 
 
