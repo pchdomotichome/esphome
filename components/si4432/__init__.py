@@ -13,7 +13,7 @@ CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(): cv.declare_id(Si4432Component),
         cv.Required(CONF_SPI_ID): cv.use_id(spi.SPIComponent),
-        cv.Required(CONF_CS_PIN): cv.pin,
+        cv.Required(CONF_CS_PIN): cv.int_,  # ← Esto acepta GPIO16 como número (válido)
     }
 )
 
