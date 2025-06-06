@@ -11,15 +11,14 @@ class Si4432Component : public Component {
   void setup() override;
   void loop() override;
 
-  void set_spi(spi::SPIComponent *spi) { this->spi_ = spi; }
-  void set_cs_pin(GPIOPin *cs) { this->cs_pin_ = cs; }
+  void set_spi(esphome::spi::SPIComponent *spi) { this->spi_ = spi; }
+  void set_cs_pin(int cs_pin) { this->cs_pin_ = cs_pin; }
 
  protected:
-  spi::SPIComponent *spi_;
-  GPIOPin *cs_pin_;
-  uint32_t last_read_time_{0};
-
   uint8_t read_register(uint8_t reg);
+
+  esphome::spi::SPIComponent *spi_{nullptr};
+  int cs_pin_{-1};
 };
 
 }  // namespace si4432
