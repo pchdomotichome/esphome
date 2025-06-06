@@ -1,0 +1,16 @@
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+  miso_pin: GPIO19
+
+sensor:
+  - platform: template
+    name: "SI4432 Chip OK"
+    id: si4432_status
+    unit_of_measurement: ""
+    accuracy_decimals: 0
+
+si4432:
+  id: si4432_chip
+  cs_pin: GPIO16
+  status_sensor: si4432_status
