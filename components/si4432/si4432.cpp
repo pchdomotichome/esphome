@@ -12,9 +12,12 @@ void Si4432Component::setup() {
 }
 
 void Si4432Component::loop() {
-  const uint32_t now = millis();
-  if (now - this->last_log_time_ >= 5000) {
-    this->last_log_time_ = now;
+  static uint32_t last_read = 0;
+  const uint32_t interval_ms = 5000;
+  uint32_t now = millis();
+
+  if (now - last_read >= interval_ms) {
+    last_read = now;
 
     uint8_t reg_07 = read_register(0x07);  // Operating Mode & Function Control 1
     uint8_t reg_0C = read_register(0x0C);  // Device Status
