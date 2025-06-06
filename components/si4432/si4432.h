@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "esphome/core/component.h"
@@ -11,15 +12,12 @@ class Si4432Component : public Component, public spi::SPIDevice<spi::BIT_ORDER_M
  public:
   void setup() override;
   void loop() override;
-  float get_setup_priority() const override { return setup_priority::HARDWARE; }
 
-  void set_cs_pin(GPIOPin *pin) { this->cs_pin_ = pin; }
-  void set_status_sensor(sensor::Sensor *sensor) { this->chip_ok_ = sensor; }
+  void set_status_sensor(sensor::Sensor *sensor) { status_sensor_ = sensor; }
 
  protected:
   uint8_t read_register(uint8_t reg);
-  GPIOPin *cs_pin_;
-  sensor::Sensor *chip_ok_{nullptr};
+  sensor::Sensor *status_sensor_{nullptr};
 };
 
 }  // namespace si4432
