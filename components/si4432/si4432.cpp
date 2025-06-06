@@ -4,6 +4,7 @@ namespace esphome {
 namespace si4432 {
 
 void Si4432Component::setup() {
+  this->spi_setup();  // 🔧 Inicializa el dispositivo SPI
   ESP_LOGI("si4432", "Setup completo.");
 }
 
