@@ -19,8 +19,9 @@ async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
-    cg.add(var.set_cs_pin(config[CONF_CS_PIN]))
+    # SPI parent resolution: get the actual SPIComponent object
+    spi_parent = await cg.get_variable(config[CONF_SPI_ID])
+    await spi.register_spi_device(var, spi_parent)
 
-    # `config[CONF_SPI_ID]` ya es el objeto SPIComponent
-    await spi.register_spi_device(var, config[CONF_SPI_ID])
+    cg.add(var.set_cs_pin(config[CONF_CS_PIN]))
 
