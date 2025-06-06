@@ -8,37 +8,38 @@ static const char *const TAG = "si4432";
 
 void Si4432Component::setup() {
   ESP_LOGI(TAG, "Si4432 setup starting");
-
-  // Inicializa el SPI
-  this->spi_setup();
-
-  ESP_LOGI(TAG, "Si4432 setup: CS pin is GPIO%d", this->cs_pin_);
+  this->spi_setup();  // Inicializa SPI desde SPIDevice
 }
 
 void Si4432Component::loop() {
-  static uint32_t last_read = 0;
-  if (millis() - last_read > 5000) {
-    last_read = millis();
+  const uint32_t now = millis();
+  if (now - last_read_time_ < 5000)
+    return;
 
-    // Leer algunos registros clave del chip Si4432
-    uint8_t reg07 = this->read_register(0x07);  // Operating mode and function control 1
-    uint8_t reg08 = this->read_register(0x08);  // Operating mode and function control 2
-    uint8_t reg0C = this->read_register(0x0C);  // Device status
+  last_read_time_ = now;
 
-    ESP_LOGI(TAG, "Reg 0x07 = 0x%02X | Reg 0x08 = 0x%02X | Reg 0x0C = 0x%02X", reg07, reg08, reg0C);
-  }
+  uint8_t status = read_register(0x07);  // Operating Mode & Function Control 1
+  uint8_t interrupt_status1 = read_register(0x03);
+  uint8_t interrupt_status2 = read_register(0x04);
+  uint8_t device_status = read_register(0x02);
+
+  ESP_LOGI(TAG, "Reg 0x07 (OpMode1):  0x%02X", status);
+  ESP_LOGI(TAG, "Reg 0x03 (IntStat1): 0x%02X", interrupt_status1);
+  ESP_LOGI(TAG, "Reg 0x04 (IntStat2): 0x%02X", interrupt_status2);
+  ESP_LOGI(TAG, "Reg 0x02 (DevStat):  0x%02X", device_status);
 }
 
 uint8_t Si4432Component::read_register(uint8_t reg) {
   this->enable();  // CS LOW
-  this->transfer(reg & 0x7F);  // Clear MSB to indicate read
-  uint8_t value = this->transfer(0x00);  // Dummy byte to read response
+  this->transfer_byte(reg & 0x7F);  // MSB=0 for read
+  uint8_t value = this->transfer_byte(0x00);  // Dummy write
   this->disable();  // CS HIGH
   return value;
 }
 
 }  // namespace si4432
 }  // namespace esphome
+
 
 
 
