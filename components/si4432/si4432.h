@@ -19,6 +19,8 @@ class Si4432Component : public Component,
  protected:
   uint8_t read_register(uint8_t reg);
   void write_register(uint8_t reg, uint8_t value);
+  
+  uint32_t last_log_time_{0};
 };
 
 }  // namespace si4432
