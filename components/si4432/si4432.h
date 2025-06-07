@@ -7,7 +7,9 @@ namespace esphome {
 namespace si4432 {
 
 // Clase principal del componente
-class Si4432Component : public Component,
+class Si4432Component : public sensor::Sensor,
+                        public PollingComponent,
+                        public Component,
                         public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST,
                                               spi::CLOCK_POLARITY_LOW,
                                               spi::CLOCK_PHASE_LEADING,
